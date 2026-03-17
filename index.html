@@ -277,36 +277,101 @@
   .ramps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
   .ramp-card {
     background: var(--black);
-    padding: 36px 28px;
     position: relative;
     overflow: hidden;
     cursor: pointer;
     transition: background 0.3s;
+    display: flex;
+    flex-direction: column;
   }
   .ramp-card:hover { background: #1a1a1a; }
   .ramp-card:hover .ramp-card-num { color: var(--orange); }
+
+  .ramp-viewer-wrap {
+    width: 100%;
+    aspect-ratio: 4/3;
+    position: relative;
+    background: #0a0a0a;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+  .ramp-canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    cursor: grab;
+  }
+  .ramp-canvas:active { cursor: grabbing; }
+
+  .ramp-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    border: 1.5px dashed rgba(255,255,255,0.08);
+  }
+  .ramp-placeholder-icon {
+    font-size: 28px; opacity: 0.3;
+  }
+  .ramp-placeholder-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    line-height: 1.8;
+  }
+  .ramp-placeholder-file {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--orange);
+    opacity: 0.6;
+    text-align: center;
+  }
+  .ramp-mini-loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(10,10,10,0.9);
+    z-index: 5;
+    transition: opacity 0.4s;
+  }
+  .ramp-mini-loading.hidden { opacity: 0; pointer-events: none; }
+  .ramp-mini-bar-wrap {
+    width: 80px; height: 1px; background: rgba(255,255,255,0.1);
+  }
+  .ramp-mini-bar {
+    height: 100%; width: 0%; background: var(--orange); transition: width 0.2s;
+  }
+
+  .ramp-card-info {
+    padding: 20px 22px 24px;
+    position: relative;
+    flex: 1;
+  }
   .ramp-card-num {
     font-family: 'Space Mono', monospace;
     font-size: 10px;
     color: rgba(255,255,255,0.25);
     letter-spacing: 2px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 6px;
     transition: color 0.3s;
   }
   .ramp-card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
+    font-size: 28px;
     letter-spacing: 2px;
     color: var(--white);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .ramp-card-desc {
     font-size: 12px; line-height: 1.6;
     color: rgba(255,255,255,0.4);
   }
   .ramp-card-arrow {
-    position: absolute; bottom: 24px; right: 24px;
-    font-size: 20px; color: rgba(255,255,255,0.15);
+    position: absolute; bottom: 20px; right: 20px;
+    font-size: 18px; color: rgba(255,255,255,0.15);
     transition: color 0.3s, transform 0.3s;
   }
   .ramp-card:hover .ramp-card-arrow { color: var(--orange); transform: translate(3px,-3px); }
@@ -409,42 +474,115 @@
       <a href="#" class="ramps-link">Ramps 101 →</a>
     </div>
     <div class="ramps-grid">
+
       <div class="ramp-card">
-        <div class="ramp-card-num">01 — Ramp</div>
-        <div class="ramp-card-name">Quarter Pipe</div>
-        <div class="ramp-card-desc">The classic. A curved quarter-circle ramp used for launching, grinding, and carving.</div>
-        <div class="ramp-card-arrow">↗</div>
+        <div class="ramp-viewer-wrap">
+          <canvas class="ramp-canvas" id="rc-0"></canvas>
+          <div class="ramp-placeholder" id="rp-0">
+            <div class="ramp-placeholder-icon">🛹</div>
+            <div class="ramp-placeholder-text">Add your 3D model</div>
+            <div class="ramp-placeholder-file">quarter-pipe.glb</div>
+          </div>
+          <div class="ramp-mini-loading hidden" id="rl-0"><div class="ramp-mini-bar-wrap"><div class="ramp-mini-bar" id="rb-0"></div></div></div>
+        </div>
+        <div class="ramp-card-info">
+          <div class="ramp-card-num">01 — Ramp</div>
+          <div class="ramp-card-name">Quarter Pipe</div>
+          <div class="ramp-card-desc">The classic. A curved quarter-circle ramp used for launching, grinding, and carving.</div>
+          <div class="ramp-card-arrow">↗</div>
+        </div>
       </div>
+
       <div class="ramp-card">
-        <div class="ramp-card-num">02 — Ramp</div>
-        <div class="ramp-card-name">Mini Ramp</div>
-        <div class="ramp-card-desc">Two quarter pipes facing each other. Perfect for backyard sessions and progression.</div>
-        <div class="ramp-card-arrow">↗</div>
+        <div class="ramp-viewer-wrap">
+          <canvas class="ramp-canvas" id="rc-1"></canvas>
+          <div class="ramp-placeholder" id="rp-1">
+            <div class="ramp-placeholder-icon">🛹</div>
+            <div class="ramp-placeholder-text">Add your 3D model</div>
+            <div class="ramp-placeholder-file">mini-ramp.glb</div>
+          </div>
+          <div class="ramp-mini-loading hidden" id="rl-1"><div class="ramp-mini-bar-wrap"><div class="ramp-mini-bar" id="rb-1"></div></div></div>
+        </div>
+        <div class="ramp-card-info">
+          <div class="ramp-card-num">02 — Ramp</div>
+          <div class="ramp-card-name">Mini Ramp</div>
+          <div class="ramp-card-desc">Two quarter pipes facing each other. Perfect for backyard sessions and progression.</div>
+          <div class="ramp-card-arrow">↗</div>
+        </div>
       </div>
+
       <div class="ramp-card">
-        <div class="ramp-card-num">03 — Ramp</div>
-        <div class="ramp-card-name">Vert Ramp</div>
-        <div class="ramp-card-desc">Full vert with vertical sections at the top. The pinnacle of ramp skateboarding.</div>
-        <div class="ramp-card-arrow">↗</div>
+        <div class="ramp-viewer-wrap">
+          <canvas class="ramp-canvas" id="rc-2"></canvas>
+          <div class="ramp-placeholder" id="rp-2">
+            <div class="ramp-placeholder-icon">🛹</div>
+            <div class="ramp-placeholder-text">Add your 3D model</div>
+            <div class="ramp-placeholder-file">vert-ramp.glb</div>
+          </div>
+          <div class="ramp-mini-loading hidden" id="rl-2"><div class="ramp-mini-bar-wrap"><div class="ramp-mini-bar" id="rb-2"></div></div></div>
+        </div>
+        <div class="ramp-card-info">
+          <div class="ramp-card-num">03 — Ramp</div>
+          <div class="ramp-card-name">Vert Ramp</div>
+          <div class="ramp-card-desc">Full vert with vertical sections at the top. The pinnacle of ramp skateboarding.</div>
+          <div class="ramp-card-arrow">↗</div>
+        </div>
       </div>
+
       <div class="ramp-card">
-        <div class="ramp-card-num">04 — Ramp</div>
-        <div class="ramp-card-name">Spine</div>
-        <div class="ramp-card-desc">Two ramps back-to-back sharing a single coping. Great for transfers and tricks.</div>
-        <div class="ramp-card-arrow">↗</div>
+        <div class="ramp-viewer-wrap">
+          <canvas class="ramp-canvas" id="rc-3"></canvas>
+          <div class="ramp-placeholder" id="rp-3">
+            <div class="ramp-placeholder-icon">🛹</div>
+            <div class="ramp-placeholder-text">Add your 3D model</div>
+            <div class="ramp-placeholder-file">spine.glb</div>
+          </div>
+          <div class="ramp-mini-loading hidden" id="rl-3"><div class="ramp-mini-bar-wrap"><div class="ramp-mini-bar" id="rb-3"></div></div></div>
+        </div>
+        <div class="ramp-card-info">
+          <div class="ramp-card-num">04 — Ramp</div>
+          <div class="ramp-card-name">Spine</div>
+          <div class="ramp-card-desc">Two ramps back-to-back sharing a single coping. Great for transfers and tricks.</div>
+          <div class="ramp-card-arrow">↗</div>
+        </div>
       </div>
+
       <div class="ramp-card">
-        <div class="ramp-card-num">05 — Ramp</div>
-        <div class="ramp-card-name">Kicker</div>
-        <div class="ramp-card-desc">A flat angled launch ramp. Portable, versatile, and great for street setups.</div>
-        <div class="ramp-card-arrow">↗</div>
+        <div class="ramp-viewer-wrap">
+          <canvas class="ramp-canvas" id="rc-4"></canvas>
+          <div class="ramp-placeholder" id="rp-4">
+            <div class="ramp-placeholder-icon">🛹</div>
+            <div class="ramp-placeholder-text">Add your 3D model</div>
+            <div class="ramp-placeholder-file">kicker.glb</div>
+          </div>
+          <div class="ramp-mini-loading hidden" id="rl-4"><div class="ramp-mini-bar-wrap"><div class="ramp-mini-bar" id="rb-4"></div></div></div>
+        </div>
+        <div class="ramp-card-info">
+          <div class="ramp-card-num">05 — Ramp</div>
+          <div class="ramp-card-name">Kicker</div>
+          <div class="ramp-card-desc">A flat angled launch ramp. Portable, versatile, and great for street setups.</div>
+          <div class="ramp-card-arrow">↗</div>
+        </div>
       </div>
+
       <div class="ramp-card">
-        <div class="ramp-card-num">06 — Ramp</div>
-        <div class="ramp-card-name">Pyramid</div>
-        <div class="ramp-card-desc">Four-sided pyramid for multi-directional skating. A park staple worldwide.</div>
-        <div class="ramp-card-arrow">↗</div>
+        <div class="ramp-viewer-wrap">
+          <canvas class="ramp-canvas" id="rc-5"></canvas>
+          <div class="ramp-placeholder" id="rp-5">
+            <div class="ramp-placeholder-icon">🛹</div>
+            <div class="ramp-placeholder-text">Add your 3D model</div>
+            <div class="ramp-placeholder-file">pyramid.glb</div>
+          </div>
+          <div class="ramp-mini-loading hidden" id="rl-5"><div class="ramp-mini-bar-wrap"><div class="ramp-mini-bar" id="rb-5"></div></div></div>
+        </div>
+        <div class="ramp-card-info">
+          <div class="ramp-card-num">06 — Ramp</div>
+          <div class="ramp-card-name">Pyramid</div>
+          <div class="ramp-card-desc">Four-sided pyramid for multi-directional skating. A park staple worldwide.</div>
+          <div class="ramp-card-arrow">↗</div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -547,7 +685,7 @@
           const scale = 2.8 / maxDim;
           model.scale.setScalar(scale);
           model.position.sub(center.multiplyScalar(scale));
-          model.position.y += 0.35;
+          model.position.y += 0.6;
 
           model.traverse(child => {
             if (child.isMesh) {
@@ -634,6 +772,149 @@
     renderer.render(scene, camera);
   }
   animate();
+})();
+</script>
+
+<!-- RAMP VIEWERS -->
+<script>
+(function(){
+  const RAMPS = [
+    { id: 0, file: 'quarter-pipe.glb' },
+    { id: 1, file: 'mini-ramp.glb' },
+    { id: 2, file: 'vert-ramp.glb' },
+    { id: 3, file: 'spine.glb' },
+    { id: 4, file: 'kicker.glb' },
+    { id: 5, file: 'pyramid.glb' },
+  ];
+
+  function initRampViewer(cfg) {
+    const canvas   = document.getElementById('rc-' + cfg.id);
+    const placeholder = document.getElementById('rp-' + cfg.id);
+    const loadWrap = document.getElementById('rl-' + cfg.id);
+    const barEl    = document.getElementById('rb-' + cfg.id);
+    const wrap     = canvas.parentElement;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = 3001;
+    renderer.physicallyCorrectLights = true;
+    renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = true;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 200);
+    camera.position.set(0, 0.8, 4);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+    const key = new THREE.DirectionalLight(0xffffff, 2.2);
+    key.position.set(4, 6, 5);
+    scene.add(key);
+    const fill = new THREE.DirectionalLight(0xffeedd, 0.6);
+    fill.position.set(-4, 2, 3);
+    scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xff5c00, 0.4);
+    rim.position.set(0, -2, -4);
+    scene.add(rim);
+
+    function resize() {
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    let model = null;
+    let rotX = 0.25, rotY = 0, velX = 0, velY = 0.007;
+    let isDragging = false, prevX = 0, prevY = 0;
+    let autoSpin = true;
+
+    // Hover = pause spin, leave = resume
+    wrap.addEventListener('mouseenter', () => { autoSpin = false; });
+    wrap.addEventListener('mouseleave', () => { if (!isDragging) autoSpin = true; });
+
+    canvas.addEventListener('mousedown', e => {
+      isDragging = true; prevX = e.clientX; prevY = e.clientY;
+      canvas.style.cursor = 'grabbing'; autoSpin = false;
+    });
+    window.addEventListener('mouseup', () => { isDragging = false; canvas.style.cursor = 'grab'; });
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - prevX, dy = e.clientY - prevY;
+      velY = dx * 0.009; velX = dy * 0.009;
+      rotY += velY; rotX += velX;
+      prevX = e.clientX; prevY = e.clientY;
+    });
+    canvas.addEventListener('wheel', e => {
+      camera.position.z = Math.max(1.5, Math.min(10, camera.position.z + e.deltaY * 0.004));
+      e.preventDefault();
+    }, { passive: false });
+
+    // Load model
+    loadWrap.classList.remove('hidden');
+
+    fetch(cfg.file)
+      .then(r => {
+        if (!r.ok) throw new Error('not found');
+        const total = +r.headers.get('content-length') || 0;
+        let loaded = 0;
+        const reader = r.body.getReader();
+        const chunks = [];
+        function read() {
+          return reader.read().then(({ done, value }) => {
+            if (done) return;
+            chunks.push(value); loaded += value.length;
+            if (total) barEl.style.width = Math.round((loaded/total)*90) + '%';
+            return read();
+          });
+        }
+        return read().then(() => new Blob(chunks).arrayBuffer());
+      })
+      .then(buf => {
+        barEl.style.width = '100%';
+        const loader = new THREE.GLTFLoader();
+        loader.parse(buf, '', gltf => {
+          model = gltf.scene;
+          const box = new THREE.Box3().setFromObject(model);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale = 2.4 / maxDim;
+          model.scale.setScalar(scale);
+          model.position.sub(center.multiplyScalar(scale));
+          model.position.y += 0.2;
+          model.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+          scene.add(model);
+          placeholder.style.display = 'none';
+          setTimeout(() => loadWrap.classList.add('hidden'), 400);
+        });
+      })
+      .catch(() => {
+        loadWrap.classList.add('hidden');
+        // placeholder stays visible — model not yet added
+      });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (autoSpin) rotY += 0.007;
+      if (!isDragging) { velX *= 0.9; velY *= 0.9; rotX += velX; rotY += velY; }
+      rotX = Math.max(-1.2, Math.min(1.2, rotX));
+      if (model) { model.rotation.x = rotX; model.rotation.y = rotY; }
+      renderer.render(scene, camera);
+    }
+    animate();
+  }
+
+  // Wait for GLTFLoader to be available then init all ramp viewers
+  function waitForLoader() {
+    if (typeof THREE !== 'undefined' && THREE.GLTFLoader) {
+      RAMPS.forEach(initRampViewer);
+    } else {
+      setTimeout(waitForLoader, 100);
+    }
+  }
+  waitForLoader();
 })();
 </script>
 
